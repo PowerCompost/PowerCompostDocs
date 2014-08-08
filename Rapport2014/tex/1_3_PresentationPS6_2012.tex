@@ -1,0 +1,17 @@
+\documentclass[../PS6_RapportFinal.tex]{subfiles}
+
+\begin{document}
+\graphicspath{{img/}{tex/img/}}
+\subsection{Présentation de PS6 2012}
+\label{presentationPS6}
+Le projet \og Power Compost \fg{} est né en 2012, six étudiants ayant travaillé dessus l'année dernière. Il s'est largement inspiré des travaux de Jean Pain, un agriculteur français qui a passé une grande partie de son existence à la mise en place d'un système permettant la récupération d'énergie à partir d'un tas de compost à l'aide d'un tuyau d'eau : ce dernier est placé dans le tas de compost et est chauffé par celui-ci. Il s'agissait donc de reproduire cette expérience à une échelle miniature puisque les objets d'étude de Jean Pain atteignaient plusieurs mètres de haut. Ainsi, ils ont commencé leurs travaux par une étude théorique de la réaction de compostage, et en particulier sa décomposition en quatre phases bien distinctes. Une fois l'étude physico-chimique terminée, la réalisation d'un banc d'essai s'est avérée nécessaire : dans une cuve de \num{0.7} \si{\cubic\metre} de volume, isolée au préalable extérieurement à l'aide de polystyrène, ils avaient prévu d'introduire un serpentin en cuivre de 12 mètres de long, dans lequel circulait de l'eau destinée à être chauffée pour pouvoir ensuite en récupérer son énergie sous forme de chaleur. Cependant, ceci n'a pas pu être effectué faute de temps.
+
+Après la mise en place du compost, il a fallu ensuite introduire quatre tubes en PVC dans le but d'aérer le compost de l'intérieur. Le tas de compost était arrosé régulièrement, puisque l'étude physico-chimique réalisée au préalable avait permis de mettre en valeur le fait que l'aération et l'humidification du compost étaient essentielles à la faisabilité de la réaction de compostage.
+Il a fallu également mettre en place un système d'acquisition de plusieurs paramètres physiques régissant l'évolution de la réaction, en particulier la température. Ainsi, l'achat de thermocouples et de d'une sonde de température Pt500 a été réalisé.
+
+% % On pourrait mettre ici une photo de l'ancien groupe ? Je n'en ai pas trouvé.
+
+En parallèle à la réalisation de ce banc d'essai, un programme a été codé dans le but de simuler la réaction et de comparer les modèles numériques et expérimentaux. Ainsi, les résultats ont montré que les différents modèles étaient cohérents pour une réaction d'ordre zéro. Pour des raisons de facilité, l'algorithme de calcul utilise la méthode des différences finies. Ce procédé a été particulièrement utile pour comprendre la nature de la réaction, en particulier au niveau de la cinétique chimique, puisque des réactions d'ordre différents donnent des profils d'évolution de température très différents au cours du temps.
+
+Enfin, une analyse fonctionnelle et technique a été réalisée pour permettre de formuler puis répondre à un besoin exprimé par l'utilisateur. Le souhait de ce dernier est de récupérer de l'énergie par l'intermédiaire d'un fluide caloporteur, de l'eau en l'occurrence ici. Différentes caractéristiques techniques de l'échangeur avaient été avancées, comme la taille ou l'efficacité de l'échangeur à concevoir.
+\end{document}

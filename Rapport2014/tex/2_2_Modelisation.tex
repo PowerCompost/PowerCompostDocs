@@ -1,0 +1,76 @@
+\documentclass[../PS6_RapportFinal.tex]{subfiles}
+
+\begin{document}
+\graphicspath{{img/}{tex/img/}}
+\subsection{Modélisation}
+\label{modelisation}
+
+Un modèle simple, repris des résultats du groupe de l'année précédente, sera utilisé pour simuler la décomposition du compost. Il s'agit d'un modèle de diffusion de la chaleur avec un terme source non constant.
+
+\[
+\left\{
+\begin{array}{ll}
+\displaystyle \rho c_{p} \frac{\partial T}{\partial t} = \displaystyle \lambda \Delta T + H\frac{\partial c}{\partial t} \\
+\displaystyle \frac{\partial c}{\partial t} = \displaystyle k_{reac}e^{-\frac{E_{a}}{RT}}c\\
+\end{array}
+\right.
+\]
+
+où $\rho$ est la masse volumique du compost, $c_{p}$ sa capacité thermique massique, $\lambda$ sa conductivité thermique, $H$ l'enthalphie de réaction, $c$ la concentration en réactif, $k_{reac}$ la constante de réaction, $E_{a}$ l'énergie d'activtion de la réaction et $R$ la constante des gaz parfaits.
+
+Nous avons décidé de mettre en place la méthode de relaxation pour les raisons évoquées plus haut, nous allons donc l'expliciter brièvement, puis détailler l'implémentation de la méthode.
+
+\subsubsection{Le principe de la méthode de relaxation (ou de Crank-Nickolson)}
+
+Il s'agit d'une méthode dérivée de la méthode des différences finies, où l'on combine les relations explicites et implicites. On divise notre espace en N points distants d'un pas $dx$, et on considère les valeurs de températures en ces points à des intervalles de temps $dt$.
+
+Soit $T^{n}_{i,j,k}$ la température au point de coordonnées 
+$
+\left( \begin{array}{c}
+i \cdot dx \\
+j \cdot dx \\
+k \cdot dx 
+\end{array} \right)$ et au pas de temps $n \cdot dt$,
+ l'équation aux différences finies explicite s'écrit :
+\begin{eqnarray}
+\label{explicite}
+T^{n+1}_{i,j,k} - T^{n}_{i,j,k} & = & F_{0} (T^{n}_{i+1,j,k} + T^{n}_{i-1,j,k} + T^{n}_{i,j+1,k} + T^{n}_{i,j-1,k} + T^{n}_{i,j,k+1} + T^{n}_{i,j,k-1})\nonumber \\
+& & - 6F_{0} T^{n}_{i,j,k} - b (c^{n+1}_{i,j,k} - c^{n}_{i,j,k})
+\end{eqnarray}
+Où $ F_{0} = \frac {\lambda dt} {\rho c_{p} dx^{2}}$ et $ b = \frac{H}{\rho c_{p}}$.
+
+En implicite, cela donne :
+\begin{eqnarray}
+\label{implicite}
+T^{n+1}_{i,j,k} - T^{n}_{i,j,k} & = & F_{0} (T^{n+1}_{i+1,j,k} + T^{n+1}_{i-1,j,k} + T^{n+1}_{i,j+1,k} + T^{n+1}_{i,j-1,k} + T^{n+1}_{i,j,k+1} + T^{n+1}_{i,j,k-1})\nonumber \\
+& & - 6F_{0} T^{n+1}_{i,j,k} - b (c^{n+1}_{i,j,k} - c^{n}_{i,j,k})
+\end{eqnarray}
+
+Il s'agit maintenant de combiner les deux équations : $ \omega \times (\ref{explicite}) + (1 - \omega ) \times (\ref{implicite})$ où $ \omega \in [0,1]$ (dans notre cas, ici, nous prenons $\omega = \num{0.5}$).
+
+Si on nomme $T^{n}$ le vecteur colonne contenant la température aux différents nœuds définis au temps $t = n.dt$, on obtient une équation matricielle de cette forme :
+\begin{equation}
+\label{eqMatricielle}
+A.T^{n+1} = B(T^{n})
+\end{equation}
+où $A$ est une matrice scalaire très creuse et $B(T^{n})$ un vecteur colonne dépendant uniquement des valeurs des $T^{n}_{i,j,k}$. Le but est bien sûr de résoudre ce système linéaire, à chaque itération de temps.
+
+\subsubsection{Implémentation de la méthode}
+
+\paragraph{Le codage en objet} 
+~\\
+\indent Étant donné que la simulation a pour but d'être intégrée dans l'application PowerCompost, le fait de coder en objet permet de structurer et d'agencer facilement le code de la simulation avec le reste du projet. Ainsi, tout le processus se fait au sein de la classe \textsl{Problem}, qui prend comme arguments tous les paramètres nécessaires pour faire les calculs, comme la capacité calorifique,la conductivité thermique, les dimensions de la cuve, les coordonnées des capteurs (en tout, une vingtaine). C'est l'utilisateur qui fixe ces paramètres par l'intermédiaire de l'interface graphique, soit en validant une valeur par défaut, soit en entrant des valeurs qu'il a tirée des expériences.
+~\\
+\indent Certaines valeurs seront mesurées précisément lors des expériences (voir partie suivante) et ne devront donc pas être modifiées lors des simulations successives afin de se rapprocher de la courbe expérimentale. D'autres seront juste un ordre de grandeur et c'est sur ces degrés de liberté-là qu'il faudra jouer.
+
+
+\paragraph{Les conditions limites du problème}
+~\\
+\indent Nous avons considéré ici que tous les points $(i,j,k)$ étaient à l'intérieur de la cuve (c'est-à-dire qu'aucun n'est sur le bord et a donc une température fixée). Cela permet d'inclure toutes les conditions limites dans le second membre (ce qui fait que le code du second membre est la partie la plus longue du code).
+
+
+\paragraph{La résolution du système}
+~\\
+\indent La matrice $A$ de l'équation (\ref{eqMatricielle}) ne varie pas au fil des itérations, il suffit donc de la décomposer une unique fois au début de la simulation. Nous avons choisi pour cela la méthode de décomposition LU car $A$ a toutes les chances d'être inversible (puisque l'ensemble des matrices inversibles est dense dans l'ensemble des matrices). Nous avons donc codé une fonction decompositionLU en nous inspirant du cours de Méthodes Numériques.
+
+\end{document}

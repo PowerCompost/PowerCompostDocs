@@ -1,0 +1,54 @@
+\documentclass[../PS6_RapportFinal.tex]{subfiles}
+
+\begin{document}
+\graphicspath{{img/}{tex/img/}}
+\subsection{Protocole expérimental et acquisition}
+
+Afin de vérifier les données issues de la littérature et de déterminer un modèle plus proche de la réalité, des expériences ont été mises en place afin d'évaluer directement ou indirectement des caractéristiques d'un tas de compost et de procéder par identification inverse pour les paramètres plus délicats à mesurer. Nous présentons ici ce qui a été mis en place.
+
+%Nouveau banc d'essai et acquisition 2.0
+
+\subsubsection{Protocole}
+
+L'équipe précédente avait choisi d'instrumenter avec des thermocouples une cuve isolée contenant des déchets verts à composter afin de relever la température en différents points du tas ainsi que la température extérieure. Cela permettait d'évaluer si la chaleur dégagée était bien suffisamment importante pour l'application que nous souhaitions mais aussi d'étudier la réaction de compostage via l'équation de la chaleur comme présenté en partie \ref{modelisation}. Cette réaction se faisait en intérieur.
+
+Cette année, nous avons choisi d'utiliser le même banc d'essai et d'en concevoir un autre identique. Ce dispositif nous permet de mener des essais en parallèle avec le même type de compost et des conditions expérimentales différentes. Nous avons également déplacé les cuves en extérieur, pour des raisons de place, mais cela nous permet aussi d'observer l'influence de l'évolution quotidienne de la température extérieure sur la réaction. De plus, les simulateurs développés l'année dernière étant performants avec une température extérieure constante, ce qui était pratiquement le cas en intérieur, ces conditions expérimentales ouvraient de nouvelles perspectives en modélisation.
+
+%Les thermocouples sont placés dans les tas aux positions suivantes (figure).
+
+Grâce à notre méthode d'acquisition, nous pouvons suivre heure par heure l'évolution de la température dans les tas. Nous pouvons ainsi arrêter l'expérience lorsque nous estimons qu'elle est finie, ce qui peut varier de plusieurs semaines suivant ce que nous souhaitons observer.
+
+Aussi, des expériences ont été réalisées pour mesurer directement la conductivité et la capacité thermique du compost, présentés en partie \ref{mesurecaracteristiques}.
+
+\subsubsection{Acquisition et stockage des mesures}
+L'année précédente, les mesures étaient faites à l'aide d'un matériel d'acquisition National Instruments et d'un programme LabVIEW\texttrademark\ sur ordinateur qui générait des fichiers .xls.
+
+Cette solution présente cependant quelques inconvénients. Tout d'abord le format .xls rend la manipulation des fichiers plus complexe lorsqu'ils ont été modifiés avec un tableur, quand ils sont exploitables par un tel logiciel... Nous avons par exemple des fichiers qui dépassent la limite maximale du nombre de lignes d'Excel.
+Aussi en cas de coupure de courant, il fallait relancer l'ordinateur et le programme pour reprendre l'acquisition : des données pouvaient donc être perdues.
+L'instrument virtuel créé à l'aide de LabVIEW\texttrademark\ a généré par le passé des fichiers comportant par exemple de mauvaises dates de début d'acquisition : l'outil ne nous a pas semblé suffisamment robuste.
+
+Pour remédier à ces problèmes entre autres et parmi plusieurs solutions envisagées, la suivante fut choisie :
+
+Le nombre de bancs d'essai étant passé à deux cette année, un matériel d'acquisition CompactRIO de la société National Instruments a été acquis en partie sur les fonds du projet. Il possède un serveur FTP et relance automatiquement les mesures en cas de coupure de courant conformément au programme mémorisé sur le dispositif.
+
+Via le réseau de l'ENS, nous pouvons accéder au serveur FTP pour récupérer les fichiers de mesures, ce qui peut se faire à distance, à l'extérieur de l'École, grâce à un accès VPN. Cependant, afin d'éviter des pertes de données, nous avons préféré mettre en place un serveur muni d'une instruction \og cron\fg  qui vient périodiquement récupérer les données. Ce serveur les stocke dans une base de données MySQL que nous avons mis en place sur cette machine. Les données des manipulations sont centralisées pour accélérer le traitement et nous n'accédons donc qu'à la base de données, sauf en cas d'incident.
+
+\subsubsection{Traitement des données}
+
+\subsubsubsection{Import des données}
+
+Un script Python a été développé pour importer des relevés dans une base de données MySQL. Après la création d'une table suivant une structure de prédéfinie, il formate les données et les insère.
+Un autre script Python a été développé afin de pouvoir continuer à exploiter les données antérieures bien que leur format ne facilitait pas leur transfert.
+
+\subsubsubsection{Export des données}
+
+Un script Python a été développé pour exporter des tables de la base de données MySQL et les raccorder dans le cas d'une manipulation dont les mesures ont été interrompues. On peut préciser le pas de temps voulu et une interpolation linéaire est faite entre les points de la table. La sortie est suivant une syntaxe du type de celles utilisées pour des fichiers CSV.
+
+\subsubsubsection{Optimisation des performances : Développement d'une application en C++}
+
+Les scripts Python étant relativement lents, nous avons décidé de développer une application en C++ via le framework Qt intégrant à terme les fonctionnalités précédentes, l'export ayant été privilégié. Le logiciel contient également notre simulateur et l'architecture du programme permet facilement l'ajout de nouveaux simulateurs pour comparer leurs performances. L'application permet de sauvegarder des simulations, d'exporter directement les graphes qui nous intéressent, de faire travailler le simulateur avec les données expérimentales... 
+
+
+%Identification physique/inverse
+
+\end{document}

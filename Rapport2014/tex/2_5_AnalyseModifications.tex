@@ -1,0 +1,14 @@
+\documentclass[../PS6_RapportFinal.tex]{subfiles}
+
+\begin{document}
+\graphicspath{{img/}{tex/img/}}
+\subsection{Analyse et modifications}
+
+Concernant la simulation en elle même, quelques améliorations ont pu être mises en place : un module de tracé des températures automatisé a été écrit, et nous avons permis à l'utilisateur de changer la valeur de $\omega$ (jusque-là fixé à $\frac{1}{2}$), afin de vérifier que les résultats obtenus ne changent pas selon la valeur de $\omega$.
+
+Des recherches ont aussi été menées pour optimiser le code. En effet, la matrice de relaxation en trois dimensions est une matrice très creuse, obtenue avec deux produits de Kronecker effectués successivement sur une matrice de relaxation unidimensionnelle. En utilisant cette propriété, nous pourrions passer d'un code de complexité $n^{2}$ à une complexité $n$.
+
+Malheureusement, nous n'avons pas trouvé de bibliothèque de fonctions C++ gérant à la fois les matrices creuses et le produit de Kronecker.
+
+
+\end{document}

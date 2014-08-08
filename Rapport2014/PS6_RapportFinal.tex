@@ -1,0 +1,198 @@
+\documentclass[a4paper,11pt,french]{article}
+\usepackage[top=3cm, bottom=3cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\usepackage{soulutf8}
+
+\usepackage{subfiles}
+
+\usepackage{multicol}
+
+\DecimalMathComma
+
+\usepackage{enumerate}
+
+\usepackage{color}
+\usepackage{eurosym}
+\usepackage{fancyref}
+\renewcommand{\fancyrefdefaultformat}{plain}
+\renewcommand*{\frefeqname}{équation}
+\renewcommand*{\freftabname}{tableau}
+\renewcommand*{\fancyrefargdelim}{-}
+
+\usepackage{numprint}
+
+\parskip 5pt 
+
+%----------------------------------------------------------------------------------------
+%			Packages scientifiques
+%----------------------------------------------------------------------------------------
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{makeidx}
+\usepackage{graphicx}
+\usepackage[europeanresistors]{circuitikz}
+%\usepackage{mathenv}
+\usepackage{chemfig}
+\usepackage{siunitx}
+\sisetup{locale = FR}
+
+\setcounter{tocdepth}{3}
+
+%----------------------------------------------------------------------------------------
+% subsubsubsection
+%----------------------------------------------------------------------------------------
+
+\setcounter{secnumdepth}{4}
+
+\makeatletter
+\newcounter {subsubsubsection}[subsubsection]
+\renewcommand\thesubsubsubsection{\thesubsubsection .\@alph\c@subsubsubsection}
+\newcommand\subsubsubsection{\@startsection{subsubsubsection}{4}{\z@}%
+                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
+                                     {1.5ex \@plus .2ex}%
+                                     {\normalfont\normalsize\bfseries}}
+\renewcommand\paragraph{\@startsection{paragraph}{5}{\z@}%
+                                    {3.25ex \@plus1ex \@minus.2ex}%
+                                    {-1em}%
+                                    {\normalfont\normalsize\bfseries}}
+\renewcommand\subparagraph{\@startsection{subparagraph}{6}{\parindent}%
+                                       {3.25ex \@plus1ex \@minus .2ex}%
+                                       {-1em}%
+                                      {\normalfont\normalsize\bfseries}}
+\newcommand*\l@subsubsubsection{\@dottedtocline{4}{10.0em}{4.1em}}
+\renewcommand*\l@paragraph{\@dottedtocline{5}{10em}{5em}}
+\renewcommand*\l@subparagraph{\@dottedtocline{6}{12em}{6em}}
+\newcommand*{\subsubsubsectionmark}[1]{}
+\makeatother
+
+%----------------------------------------------------------------------------------------
+%			Définition entêtes
+%----------------------------------------------------------------------------------------
+
+\pagestyle{headings}
+
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\renewcommand{\headrulewidth}{0.25mm}
+\fancyhead[L]{\textsc{PowerCompost 2.0}}
+%\fancyhead[R]{\lesauteurs}
+
+\renewcommand{\footrulewidth}{0.25mm}
+\fancyfoot[C]{\thepage / \pageref{LastPage}}
+
+\renewcommand{\headrule}{{\color[rgb]{0.4,0.59,0.2}%
+\hrule width\headwidth height\headrulewidth \vskip-\headrulewidth}}
+
+\renewcommand{\footrule}{{\color[rgb]{0.4,0.59,0.2}%
+\vskip-\footruleskip\vskip-\footrulewidth
+\hrule width\headwidth height\footrulewidth\vskip\footruleskip}}
+
+%----------------------------------------------------------------------------------------
+%			Définition page de garde
+%----------------------------------------------------------------------------------------
+
+%\newcommand*{\titleGM}{\begingroup 
+%\hbox{ 
+%\hspace*{0.2\textwidth} 
+%\rule{1pt}{\textheight} 
+%\hspace*{0.05\textwidth} 
+%\parbox[b]{0.75\textwidth}{ 
+%
+%%{\lecodecours : \intituleducours}\\[4\baselineskip]
+%{\noindent\Huge \bfseries \letitre}\\[1\baselineskip]
+%{\large \textit{\lesoustitre}}\\[4\baselineskip]
+%{\Large \textsc{\lesauteurs}}\\ [2\baselineskip]
+%
+%
+%\vspace{0.5\textheight} 
+%{\noindent Juin 2014}\\[\baselineskip]
+%}}
+%\endgroup}
+
+%----------------------------------------------------------------------------------------
+%----------------------------------------------------------------------------------------
+
+%\ctikzset{tripoles/mos style/arrows}
+
+\makeindex
+
+\begin{document}
+
+\subfile{tex/couverture.tex}
+
+\section*{Introduction}
+
+Alors que le cinquième rapport du Groupe intergouvernemental d'experts sur l'évolution du climat (GIEC) doit être publié au second semestre 2014, les premiers volets diffusés évoquent une situation encore plus alarmante que lors de la précédente édition en 2007. Augmentation du réchauffement de la planète, du niveau des mers, des catastrophes climatiques, de l'insécurité alimentaire, des problèmes sanitaires, des conflits, des coûts et des impacts sur l'économie : toutes les prévisions sont revues de façon pessimiste.
+
+À propos des émissions de gaz à effet de serre, une transformation du secteur de l'énergie apparaît indispensable pour tenir les objectifs fixés par les Nations Unies. Le chauffage représente en France 43\% de ces émissions : il est donc intéressant de développer des solutions en ce sens.
+
+Dans les années 1970, Jean Pain développa un système de récupération d'énergie pour un tas de déchets verts durant leur processus de compostage. L'année dernière, le projet PS6 s'inspira de cette méthode afin de produire un premier banc expérimental et de créer un cahier des charges pour la conception d'un échangeur thermique pour le chauffage domestique comme présenté en partie \ref{presentationPS6}. Nos travaux s'inscrivent dans la continuité de ceux de l'année passée et nous avons donc pour objectifs de :
+\begin{itemize}
+\item Mesurer, calculer et optimiser l'énergie relâchée par la réaction de dégradation du compost
+\item Concevoir un système de récupération d'énergie innovant pour un tas de compost 
+\end{itemize}
+
+\clearpage
+
+\tableofcontents
+
+\clearpage
+
+\section{Étude préliminaire et bases du projet}
+
+\subfile{tex/1_1_DescriptionDeLaReaction.tex}
+
+\subfile{tex/1_2_ComparaisonAutresEnergie.tex}
+
+\subfile{tex/1_3_PresentationPS6_2012.tex}
+
+\section{Compostage et modélisation}
+
+\subfile{tex/2_1_ProtocoleExperimental.tex}
+
+\subfile{tex/2_3_Mesures_caracteristiques_compost.tex}
+
+\subfile{tex/2_2_Modelisation.tex}
+
+\subfile{tex/2_4_Resultats.tex}
+
+\subfile{tex/2_5_AnalyseModifications.tex}
+
+\section{Réalisation d'un système de soutirage d'énergie}
+
+\subfile{tex/3_1_AnalyseExistant.tex}
+
+\subfile{tex/3_2_ConceptionNouvelEchangeur.tex}
+
+\subfile{tex/3_3_Essais.tex}
+
+\clearpage
+
+\section{Conclusion et perspectives}
+
+Les travaux menés cette année ont permis de confirmer que le compost était une réelle source d'énergie. En effet, nous sommes parvenus à évacuer seulement 6\% de l'énergie contenue dans une cuve avec les essais menés, ce qui souligne l'importance de l'optimisation de la réaction, par l'apport de dioxygène et l'humidification du tas de compost. À ce titre, la méthode de Jean Pain comporte une phase pendant laquelle les déchets sont plongés dans l'eau durant plusieurs jours : c'est une manipulation à essayer. De même, nous avons conçu une première solution de ventilation du tas, celle-ci est à tester afin de vérifier son efficacité.
+
+Nous avons également produit un échangeur thermique à caloducs dont l'efficacité est  de 20\% au lieu de 30\% attendue. Ajouter de la mousse métallique à l'intérieur du boîtier afin d'augmenter la surface d'échange ainsi qu'ajouter un évent sur le boîtier pour évacuer l'air contenu sont des pistes pour augmenter cette efficacité.
+
+Un autre axe de travail se situe au niveau de la régulation du système de prélèvement avec un asservissement de la température dans le tas en fonction du débit dans l'échangeur. Nous estimons qu'un système basé sur une carte Arduino\texttrademark{} pourrait être très efficace en plus d'être économique et pourrait être piloté à partir de l'application développée cette année.
+Il serait aussi intéressant de construire un système permettant de fonctionner en circuit fermé avec l'échangeur pour compléter le banc d'essai.
+
+Ainsi, les possibilités de poursuite de ce projet sont nombreuses et porteuses d'innovations technologiques afin de faire évoluer notre approvisionnement en énergie à partir de sources renouvelables et qui plus est ici fatale. Nous espérons que ces possibilités seront exploitées dans un futur proche afin d'aller encore plus loin sur ce projet pluridisciplinaire. 
+
+\clearpage
+
+\appendix
+
+\subfile{tex/5_1_Annexe_resistance_tubes.tex}
+
+\clearpage
+
+\subfile{tex/5_2_Annexe_assemblage_corps_principal.tex}
+
+
+\end{document}
